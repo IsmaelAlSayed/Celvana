@@ -1,0 +1,36 @@
+.navbar {
+    background-color: #00608A;
+    color: #fff;
+  }
+  
+  .navbar i {
+    color: #00608A;
+    margin-right: 5px;
+  }
+  
+  .nav-link {
+    color: #00608A !important;
+  }
+  
+  .form-inline {
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-control {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .btn {
+    background-color: #00608A;
+    color: #fff;
+    display: flex;
+    align-items: center;
+  }
+  
+  .form-inline.w-70 {
+    width: 70%; /* Make the search bar take 70% of the space */
+    justify-content: center; /* Center the form horizontally */
+  }
+  
