@@ -1,23 +1,18 @@
 // AuthContext.js
 import { createContext, useContext, useEffect, useState } from 'react';
-import { auth } from '../firebase'; // Import Firebase authentication functions
+import { auth } from '../firebase'; // Import your Firebase authentication setup
 import { onAuthStateChanged } from 'firebase/auth';
-
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      if (authUser) {
-        // User is signed in.
-        setUser(authUser);
-      } else {
-        // User is signed out.
-        setUser(null);
-      }
+      setUser(authUser);
+      setIsLoading(false);
     });
 
     return () => {
@@ -25,7 +20,11 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  return <AuthContext.Provider value={user}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, isLoading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {

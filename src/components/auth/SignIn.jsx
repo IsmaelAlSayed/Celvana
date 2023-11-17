@@ -1,10 +1,10 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
-import { auth } from "../../firebase";
+import React, { useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase';
 import AuthDetails from '../AuthDetails';
 import { useNavigate } from 'react-router-dom';
 
-const SignIn = () => {
+const SignIn = ({ setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,15 +14,24 @@ const SignIn = () => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Check for a successful sign-in
-        if (userCredential) {
-          navigate('/productlist'); // Redirect to UserProfile on success
+        const user = userCredential.user;
+
+        if (user) {
+          setUser(user);
+          navigate('/productlist');
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   };
+
+  const signUpMessage = (
+    <p>
+      Don't have an account? 
+      <button onClick={() => navigate('/signup')}>Sign Up</button>
+    </p>
+  );
 
   return (
     <div className="sign-in-container">
@@ -43,6 +52,7 @@ const SignIn = () => {
         <button type="submit">Log In</button>
       </form>
       <AuthDetails />
+      {signUpMessage}
     </div>
   );
 };

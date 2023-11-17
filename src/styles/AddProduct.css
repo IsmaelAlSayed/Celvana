@@ -1,0 +1,57 @@
+/* AddProduct.css */
+.add-product-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.add-product-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.add-product-container input,
+.add-product-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.add-product-container input[type="file"] {
+  margin-top: 10px;
+}
+
+.add-product-container button {
+  background-color: #007BFF;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-product-container button:hover {
+  background-color: #0056b3;
+}
+
+.add-product-container .success {
+  color: green;
+}
+
+.add-product-container .error {
+  color: red;
+}
+
+/* You can use these classes by adding them to your component's container element, for example: */
+/* <div className="add-product-container"> ... </div> */

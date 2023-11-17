@@ -1,0 +1,57 @@
+/* ProductDashboard.css */
+
+.product-dashboard-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .product-dashboard-container .dashboard-style {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .product-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #fff;
+  }
+  
+  .product-card h3 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+  }
+  
+  .product-card p {
+    font-size: 1rem;
+    margin: 5px 0;
+  }
+  
+  .product-card input[type="text"],
+  .product-card input[type="number"],
+  .product-card textarea {
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0;
+  }
+  
+  .product-card button {
+    margin: 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .product-card button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Add additional styles as needed */
+  

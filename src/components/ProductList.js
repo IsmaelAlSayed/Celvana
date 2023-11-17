@@ -1,82 +1,93 @@
-import React from 'react';
-import '../styles/ProductList.css'; // Import the CSS file
-import ring from '../images/1.png';
 
-function ProductList() {
-  // Sample product data
-  const products = [
-    {
-      id: 1,
-      name: 'Product 1',
-      price: '$19.99',
-      description: 'This is the description of Product 1.',
-      imageUrl: ring,
-    },
-    {
-      id: 2,
-      name: 'Product 2',
-      price: '$24.99',
-      description: 'This is the description of Product 2.',
-      imageUrl: ring,
-    },
-    {
-      id: 3,
-      name: 'Product 3',
-      price: '$24.99',
-      description: 'This is the description of Product 3.',
-      imageUrl: ring,
-    },
-    {
-      id: 4,
-      name: 'Product 4',
-      price: '$24.99',
-      description: 'This is the description of Product 4.',
-      imageUrl: ring,
-    },
-    {
-      id: 5,
-      name: 'Product 5',
-      price: '$24.99',
-      description: 'This is the description of Product 5.',
-      imageUrl: ring,
-    },
-    {
-      id: 6,
-      name: 'Product 6',
-      price: '$24.99',
-      description: 'This is the description of Product 6.',
-      imageUrl: ring,
-    },
-    {
-      id: 7,
-      name: 'Product 7',
-      price: '$24.99',
-      description: 'This is the description of Product 7.',
-      imageUrl: ring,
-    },
-    {
-      id: 8,
-      name: 'Product 8',
-      price: '$24.99',
-      description: 'This is the description of Product 8.',
-      imageUrl: ring,
-    },
-    // Add more products here
-  ];
+import React, { useState, useEffect } from "react";
+import { auth, db } from "../firebase";
+import { collection, getDocs, doc, setDoc, getDoc } from "firebase/firestore";
+import '../styles/ProductList.css';
 
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState([]);
+  const user = auth.currentUser;
+  
+  
+  useEffect(() => {
+    // Fetch product data from Firestore
+    const fetchProducts = async () => {
+      const productsCollection = collection(db, "products");
+      const querySnapshot = await getDocs(productsCollection);
+      const productsData = querySnapshot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
+      setProducts(productsData);
+
+      // Fetch user's cart data from Firestore if the user is logged in
+      if (user) {
+        console.log("User is logged in.1");
+        const cartCollection = collection(db, "carts", user.uid, "items");
+        const cartQuerySnapshot = await getDocs(cartCollection);
+        const cartData = cartQuerySnapshot.docs.map((doc) => {
+          return { id: doc.id, ...doc.data() };
+        });
+        setCart(cartData);
+      }else {
+        console.log("User is not logged in.2");
+      }
+    };
+    fetchProducts();
+  }, [user]);
+
+
+  const addToCart = async (product) => {
+
+    if (user) {
+      const cartItemRef = doc(db, "carts", user.uid, "items", product.id);
+  
+      try {
+        const cartItemDoc = await getDoc(cartItemRef);
+  
+        const productData1 = {
+          productName: product.productName,
+          productImage: product.imageUrl,
+          productPrice: product.price, // Save product price
+          quantity: 1, // Initialize quantity to 1
+        };
+  
+        if (cartItemDoc.exists()) {
+          // If the item already exists in the cart, update its quantity
+          const currentQuantity = cartItemDoc.data().quantity || 0;
+          productData1.quantity = currentQuantity + 1;
+        }
+  
+        await setDoc(cartItemRef, productData1);
+  
+      } catch (error) {
+        console.error("Error adding product to cart:", error);
+      }
+    } else {
+      console.log("User is not logged in.");
+    }
+  };
+  
+  
   return (
-    <div className="product-list">
+    <div className="product-list-container">
       {products.map((product) => (
-        <div className="product" key={product.id}>
-          <img src={product.imageUrl} alt={product.name} />
-          <h3>{product.name}</h3>
-          <p>{product.price}</p>
-          <p>{product.description}</p>
-          <button>Add to Cart</button>
+        <div className="product-card" key={product.id}>
+          <img src={product.imageUrl} alt={product.productName} />
+          <h3>{product.productName}</h3>
+          <p>Price: ${product.price}</p>
+          <p>Description: {product.description}</p>
+          <button onClick={() => addToCart(product)}>Add to Cart</button>
+          <button>Buy</button>
         </div>
       ))}
     </div>
   );
-}
+};
 
 export default ProductList;
+
+
+
+
+
